@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Octolamp.DaemonService": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
