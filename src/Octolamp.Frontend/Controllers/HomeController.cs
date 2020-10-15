@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Octolamp.Contracts.Extensions;
 using Octolamp.Contracts.Protos;
 using Octolamp.Frontend.Internal;
 using Octolamp.Frontend.Models;

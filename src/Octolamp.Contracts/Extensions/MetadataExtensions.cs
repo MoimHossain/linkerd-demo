@@ -1,8 +1,12 @@
-using System;
-using System.Linq;
-using Grpc.Core;
+﻿
 
-namespace Octolamp.Frontend.Internal
+using Grpc.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Octolamp.Contracts.Extensions
 {
     public static class MetadataExtensions
     {

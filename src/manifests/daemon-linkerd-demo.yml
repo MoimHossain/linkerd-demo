@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: daemon-linkerd-demo
+  namespace: linkerd-demo-workload
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: daemon-linkerd-demo
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        run: daemon-linkerd-demo
+    spec:
+      containers:
+      - env:
+        - name: Backend__Address
+          value: http://backend-linkerd-demo
+        - name: DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2UNENCRYPTEDSUPPORT
+          value: "true"
+        image: moimhossain/daemon-linkerd-demo:latest
+        imagePullPolicy: Always
+        name: daemon-linkerd-demo
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+status: {}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: daemon-linkerd-demo
+  namespace: linkerd-demo-workload
+spec:
+  ports:
+  - port: 80
+  selector:
+    run: daemon-linkerd-demo
+---

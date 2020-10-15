@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using Octolamp.Frontend.Settings;
+using Octolamp.Contracts.Settings;
 using static Octolamp.Contracts.Protos.Stocks;
 
 namespace Octolamp.Frontend

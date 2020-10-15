@@ -1,5 +1,9 @@
-﻿using Grpc.Net.Client;
+﻿
 
+using Grpc.Net.Client;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
 
@@ -9,9 +13,18 @@ namespace Octolamp.DaemonService
     {
         static void Main(string[] args)
         {
-            var serviceUri = Environment.GetEnvironmentVariable("MathBackendUri") ?? "https://172.18.0.2:443";
-
-            
+            CreateHostBuilder(args).Build().Run();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureServices(services =>
+                {
+                    services.AddHostedService<TimedHostedService>();
+                });
     }
 }

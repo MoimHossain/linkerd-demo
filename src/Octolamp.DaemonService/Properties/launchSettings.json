@@ -1,10 +1,17 @@
 {
   "profiles": {
     "Octolamp.DaemonService": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "Backend__Address": "http://backend-linkerd-demo",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     },
     "Docker": {
-      "commandName": "Docker"
+      "commandName": "Docker",
+      "environmentVariables": {
+        "Backend__Address": "http://backend-linkerd-demo"
+      }
     }
   }
 }
