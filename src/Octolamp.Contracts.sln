@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manifests", "Manifests", "{BD1CFC0E-F82D-4E1C-B982-482AEF0AD16C}"
 	ProjectSection(SolutionItems) = preProject
 		manifests\backend-linkerd-demo.yml = manifests\backend-linkerd-demo.yml
+		manifests\daemon-linkerd-demo.yml = manifests\daemon-linkerd-demo.yml
 		manifests\frontend-linkerd-demo.yml = manifests\frontend-linkerd-demo.yml
 		manifests\namespace.yml = manifests\namespace.yml
 	EndProjectSection
