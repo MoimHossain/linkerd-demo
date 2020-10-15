@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static Octolamp.Contracts.Protos.Covid;
 using static Octolamp.Contracts.Protos.Stocks;
 
 namespace Octolamp.DaemonService
@@ -22,10 +23,22 @@ namespace Octolamp.DaemonService
         {
             var count = Interlocked.Increment(ref executionCount);
 
-            var tasks = Enumerable.Range(1, 100).Select(GetAsync);
-            var stocks = await Task.WhenAll(tasks);
+            try
+            {
+                var response = await _covidClient.DoHandshakeAsync(new HandshakeRequest { ClientToken = DateTime.Now.ToLongTimeString() });
 
-            _logger.LogInformation($"Timed Hosted Service is working. Count: {count}, number of Stocks {stocks.Count()}" );
+                _logger.LogInformation("========================================================================================");
+                _logger.LogInformation($"Handshake success. Client Token = {response.ClientToken}; Server Token: {response.ServerToken}");
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+            }
+      
+            //var tasks = Enumerable.Range(1, 100).Select(GetAsync);
+            //var stocks = await Task.WhenAll(tasks);
+            //_logger.LogInformation($"Timed Hosted Service is working. Count: {count}, number of Stocks {stocks.Count()}" );
         }
 
         private async Task<Tuple<Stock, string>> GetAsync(int id)
@@ -53,11 +66,16 @@ namespace Octolamp.DaemonService
         #region Service methods
         private int executionCount = 0;
         private readonly StocksClient _stockClient;
+        private readonly CovidClient _covidClient;
         private readonly ILogger<TimedHostedService> _logger;
         private Timer _timer;
 
-        public TimedHostedService(StocksClient stockClient, ILogger<TimedHostedService> logger)
+        public TimedHostedService(
+            CovidClient covidClient,
+            StocksClient stockClient, 
+            ILogger<TimedHostedService> logger)
         {
+            _covidClient = covidClient;
             _stockClient = stockClient;
             _logger = logger;
         }

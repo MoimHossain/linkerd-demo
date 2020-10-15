@@ -3,7 +3,7 @@
     "Octolamp.DaemonService": {
       "commandName": "Project",
       "environmentVariables": {
-        "Backend__Address": "http://backend-linkerd-demo",
+        "Backend__Address": "https://localhost:44321",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

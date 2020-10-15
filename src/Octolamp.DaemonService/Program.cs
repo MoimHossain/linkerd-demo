@@ -20,6 +20,7 @@ namespace Octolamp.DaemonService
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseUrls("http://*:0"); // Bind a dynamic & random port
                     webBuilder.UseStartup<Startup>();
                 })
                 .ConfigureServices(services =>

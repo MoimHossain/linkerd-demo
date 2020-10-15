@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\Covid.proto" />
     <None Remove="Protos\stocks.proto" />
   </ItemGroup>
 
@@ -22,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\Covid.proto" />
     <Protobuf Include="Protos\stocks.proto" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 using System;
+using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Octolamp.Contracts.Settings;
+using static Octolamp.Contracts.Protos.Covid;
 using static Octolamp.Contracts.Protos.Stocks;
 
 namespace Octolamp.Frontend
@@ -24,12 +26,15 @@ namespace Octolamp.Frontend
             services.AddControllersWithViews();
             services.Configure<BackendSettings>(Configuration.GetSection("Backend"));
 
-            services.AddGrpcClient<StocksClient>((provider, options) =>
-                {
-                    var settings = provider.GetRequiredService<IOptionsMonitor<BackendSettings>>();
-                    options.Address = new Uri(settings.CurrentValue.Address);
-                    Console.WriteLine($"Backend address from configuration: {options.Address}");
-                });
+            var configureAction = new Action<IServiceProvider, GrpcClientFactoryOptions>((provider, options) =>
+            {
+                var settings = provider.GetRequiredService<IOptionsMonitor<BackendSettings>>();
+                options.Address = new Uri(settings.CurrentValue.Address);
+                Console.WriteLine($"Backend address from configuration: {options.Address}");
+            });
+
+            services.AddGrpcClient<CovidClient>(configureAction);
+            services.AddGrpcClient<StocksClient>(configureAction);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option csharp_namespace = "Octolamp.Contracts.Protos";
+
+
+service Covid {
+  rpc DoHandshake (HandshakeRequest) returns (HandshakeResponse);
+}
+
+message HandshakeRequest {
+  string clientToken = 1;
+}
+
+message HandshakeResponse {
+    string clientToken = 1;
+    string serverToken = 2;
+}

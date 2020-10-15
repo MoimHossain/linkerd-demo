@@ -33,6 +33,7 @@ namespace Octolamp.BackendService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<StockService>();
+                endpoints.MapGrpcService<CovidService>();
 
                 endpoints.MapGet("/", async context =>
                 {
