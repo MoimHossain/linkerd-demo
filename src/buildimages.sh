@@ -16,7 +16,7 @@ docker build -t moimhossain/frontend-linkerd-demo:$DockerImageTag -f ./Octolamp.
 
 echo " "
 echo "┌┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┐"
-echo "┊ Building images (Frontend)                         │"
+echo "┊ Building images (Daemon)                         │"
 echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┘"
 docker build -t moimhossain/daemon-linkerd-demo:$DockerImageTag -f ./Octolamp.DaemonService/Dockerfile .
 
