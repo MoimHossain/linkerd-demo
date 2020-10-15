@@ -1,0 +1,39 @@
+pool:
+  name: Azure Pipelines
+variables:
+  resourceGroup: 'LinkerD-demo'
+  clusterName: 'k8s-linkerd-moimha'
+
+steps:
+- task: Docker@2
+  displayName: 'Docker Hub Login'
+  inputs:
+    containerRegistry: 'Docker-Hub-Public'
+    command: login
+
+- task: AzureCLI@2
+  displayName: 'Kubernetes Set-Context'
+  inputs:
+    azureSubscription: 'Moim-AzureSubcription-POWER'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: 'az aks get-credentials --resource-group $(resourceGroup) --name $(clusterName) --overwrite-existing'
+
+- task: AzureCLI@2
+  displayName: 'Azure CLI src/buildimages.sh'
+  inputs:
+    azureSubscription: 'Moim-AzureSubcription-POWER'
+    scriptType: bash
+    scriptPath: src/buildimages.sh
+    arguments: '$(Build.BuildNumber)'
+    workingDirectory: src
+
+- task: AzureCLI@2
+  displayName: 'Kubernetes Apply'
+  inputs:
+    azureSubscription: 'Moim-AzureSubcription-POWER'
+    scriptType: bash
+    scriptPath: 'src/deploy-to-aks.sh'
+    arguments: '$(Build.BuildNumber)'
+    workingDirectory: src/manifests
+
