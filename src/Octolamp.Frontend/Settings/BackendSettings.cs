@@ -1,6 +1,6 @@
 namespace Octolamp.Frontend.Settings
 {
-    public class StockDataSettings
+    public class BackendSettings
     {
         public string Address { get; set; }
     }

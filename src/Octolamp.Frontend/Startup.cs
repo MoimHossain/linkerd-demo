@@ -22,12 +22,13 @@ namespace Octolamp.Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.Configure<StockDataSettings>(Configuration.GetSection("StockData"));
+            services.Configure<BackendSettings>(Configuration.GetSection("Backend"));
 
             services.AddGrpcClient<StocksClient>((provider, options) =>
                 {
-                    var settings = provider.GetRequiredService<IOptionsMonitor<StockDataSettings>>();
+                    var settings = provider.GetRequiredService<IOptionsMonitor<BackendSettings>>();
                     options.Address = new Uri(settings.CurrentValue.Address);
+                    Console.WriteLine($"Backend address from configuration: {options.Address}");
                 });
         }
 

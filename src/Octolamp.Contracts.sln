@@ -11,6 +11,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octolamp.BackendService", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Octolamp.Frontend", "Octolamp.Frontend\Octolamp.Frontend.csproj", "{C7BBF025-A300-4077-B923-3D7942604DB2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manifests", "Manifests", "{BD1CFC0E-F82D-4E1C-B982-482AEF0AD16C}"
+	ProjectSection(SolutionItems) = preProject
+		manifests\backend-linkerd-demo.yml = manifests\backend-linkerd-demo.yml
+		manifests\frontend-linkerd-demo.yml = manifests\frontend-linkerd-demo.yml
+		manifests\namespace.yml = manifests\namespace.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployments", "Deployments", "{5A0BF0C3-5EAE-4A07-90D8-2C91CE5DF01F}"
+	ProjectSection(SolutionItems) = preProject
+		buildimages.ps1 = buildimages.ps1
+		buildimages.sh = buildimages.sh
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

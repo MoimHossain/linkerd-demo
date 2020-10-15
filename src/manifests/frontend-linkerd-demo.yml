@@ -1,32 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  name: stockweb
-  namespace: stocks
+  name: frontend-linkerd-demo
+  namespace: linkerd-demo-workload
 spec:
   replicas: 1
   selector:
     matchLabels:
-      run: stockweb
+      run: frontend-linkerd-demo
   strategy: {}
   template:
     metadata:
       annotations:
         linkerd.io/inject: enabled
-      creationTimestamp: null
       labels:
-        run: stockweb
+        run: frontend-linkerd-demo
     spec:
       containers:
       - env:
-        - name: StockData__Address
-          value: http://stockdata
+        - name: Backend__Address
+          value: http://backend-linkerd-demo
         - name: DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2UNENCRYPTEDSUPPORT
           value: "true"
-        image: moimhossain/stockweb:latest
+        image: moimhossain/frontend-linkerd-demo:latest
         imagePullPolicy: Always
-        name: stockweb
+        name: frontend-linkerd-demo
         ports:
         - containerPort: 80
         resources:
@@ -39,12 +37,12 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: stockweb
-  namespace: stocks
+  name: frontend-linkerd-demo
+  namespace: linkerd-demo-workload
 spec:
   type: LoadBalancer 
   ports:
   - port: 80
   selector:
-    run: stockweb
+    run: frontend-linkerd-demo
 ---

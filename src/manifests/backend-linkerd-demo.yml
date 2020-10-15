@@ -1,14 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
-  name: stockdata
-  namespace: stocks
+  name: backend-linkerd-demo
+  namespace: linkerd-demo-workload
 spec:
   replicas: 2
   selector:
     matchLabels:
-      run: stockdata
+      run: backend-linkerd-demo
   strategy: {}
   template:
     metadata:
@@ -16,12 +15,12 @@ spec:
         linkerd.io/inject: enabled
       creationTimestamp: null
       labels:
-        run: stockdata
+        run: backend-linkerd-demo
     spec:
       containers:
-      - image: moimhossain/stockdata:latest
+      - image: moimhossain/backend-linkerd-demo:latest
         imagePullPolicy: Always
-        name: stockdata
+        name: backend-linkerd-demo
         ports:
         - containerPort: 80
         resources:
@@ -34,11 +33,11 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  name: stockdata
-  namespace: stocks
+  name: backend-linkerd-demo
+  namespace: linkerd-demo-workload
 spec:
   ports:
   - port: 80
   selector:
-    run: stockdata
+    run: backend-linkerd-demo
 ---
