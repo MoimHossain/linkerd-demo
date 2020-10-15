@@ -4,9 +4,9 @@ DockerImageTag=$1
 echo " "
 echo "Preparing manifests with build Tag $DockerImageTag"
 
-sed -i 's/latest/$DockerImageTag/' backend-linkerd-demo.yml
-sed -i 's/latest/$DockerImageTag/' frontend-linkerd-demo.yml
-sed -i 's/latest/$DockerImageTag/' daemon-linkerd-demo.yml
+sed -i "s/latest/$DockerImageTag/" backend-linkerd-demo.yml
+sed -i "s/latest/$DockerImageTag/" frontend-linkerd-demo.yml
+sed -i "s/latest/$DockerImageTag/" daemon-linkerd-demo.yml
 
 echo "------------------Backend end-------------------------------"
 cat backend-linkerd-demo.yml
