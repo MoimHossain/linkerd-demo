@@ -1,10 +1,14 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "Octolamp.Contracts.Protos";
 
 
 service Covid {
   rpc DoHandshake (HandshakeRequest) returns (HandshakeResponse);
+  rpc RegisterReportSummary (CovidGlobalReport) returns (HandshakeResponse);
+  rpc RegisterCountryReport (CovidCountryReport) returns (HandshakeResponse);
 }
 
 message HandshakeRequest {
@@ -14,4 +18,28 @@ message HandshakeRequest {
 message HandshakeResponse {
     string clientToken = 1;
     string serverToken = 2;
+    string status = 3;
+}
+
+message CovidGlobalReport {
+    int64 newConfirmed = 1;
+    int64 totalConfirmed = 2;
+    int64 newDeaths = 3;
+    int64 totalDeaths = 4;
+    int64 newRecovered = 5;
+    int64 totalRecovered = 6;
+    google.protobuf.Timestamp date = 7;
+}
+
+message CovidCountryReport {
+    string countryCountry = 1;
+    string countryCode = 2;
+    string slug = 3;
+    int64 newConfirmed = 4;
+    int64 totalConfirmed = 5;
+    int64 newDeaths = 6;
+    int64 totalDeaths = 7;
+    int64 newRecovered = 8;
+    int64 totalRecovered = 9;
+    google.protobuf.Timestamp date = 10;
 }

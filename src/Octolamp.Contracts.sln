@@ -21,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manifests", "Manifests", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployments", "Deployments", "{5A0BF0C3-5EAE-4A07-90D8-2C91CE5DF01F}"
 	ProjectSection(SolutionItems) = preProject
+		azure-pipeline.yaml = azure-pipeline.yaml
 		buildimages.ps1 = buildimages.ps1
 		buildimages.sh = buildimages.sh
 		deploy-to-aks.sh = deploy-to-aks.sh

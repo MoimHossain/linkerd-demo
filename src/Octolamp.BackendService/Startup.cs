@@ -19,6 +19,7 @@ namespace Octolamp.BackendService
         {
             services.AddGrpc();
             services.AddSingleton<IStockRepository, DummyStockRepository>();
+            services.AddSingleton<CovidRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
