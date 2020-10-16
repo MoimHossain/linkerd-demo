@@ -1,6 +1,7 @@
 ﻿
 
 using Google.Protobuf.WellKnownTypes;
+using Octolamp.Contracts.Extensions;
 using Octolamp.Contracts.Protos;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Octolamp.BackendService.Data
 
         public CovidRepository()
         {
-            _globalReport.Date = Timestamp.FromDateTime(DateTime.MinValue);
+            _globalReport.Date = DateTime.MinValue.ToUniversalTime().ToProtoDateTime();
         }
 
         public async Task RegisterGlobalAsync(CovidGlobalReport gr)
