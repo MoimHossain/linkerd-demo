@@ -12,9 +12,7 @@
                 </div>
             </h2>
             <div class="ui vertical menu" id="menuContainer" style="width:100%;">
-                <div class="ui active dimmer">
-                    <div class="ui massive text loader">Loading</div>
-                </div>
+                <div class="ui active inline loader"></div>
             </div>
         </div>
         <div class="ten wide column">
@@ -31,9 +29,7 @@
                     </tr>
                 </thead>
                 <tbody id="countryBody">
-                    <div class="ui active dimmer">
-                        <div class="ui massive text loader">Loading</div>
-                    </div>
+                    <div class="ui active inline loader"></div>
                 </tbody>
             </table>
         </div>
@@ -94,9 +90,10 @@
                 $('#countryBody').html(htmls.join(' '));  
 
                 data.forEach(row => {
+                    row.slug = (row.slug + "").replace("-", "");
                     if (window[row.slug]) {
                         var old = window[row.slug];
-                        if (old.date.nanos !== row.date.nanos) {
+                        if (old && old.date && old.date.nanos !== row.date.nanos) {
                             highlightFor(row.slug, 'orange', 1);
                         }
                     }
