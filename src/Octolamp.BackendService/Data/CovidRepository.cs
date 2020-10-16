@@ -40,10 +40,15 @@ namespace Octolamp.BackendService.Data
 
             if (entry == null)
             {
-                entry = new CovidCountryReport();
+                entry = new CovidCountryReport
+                {
+                    CountryCode = country.CountryCode,
+                    CountryCountry = country.CountryCountry,
+                    Slug = country.Slug,
+                };
             }
 
-            if(entry != null )
+            if (entry != null)
             {
                 entry.Date = country.Date;
                 entry.NewConfirmed = country.NewConfirmed;
@@ -53,7 +58,7 @@ namespace Octolamp.BackendService.Data
                 entry.NewRecovered = country.NewRecovered;
                 entry.TotalRecovered = country.TotalRecovered;
                 _countryList.TryAdd(country.Slug, entry);
-            }   
+            }
             await Task.CompletedTask;
         }
 

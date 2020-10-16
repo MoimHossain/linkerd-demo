@@ -35,7 +35,7 @@ namespace Octolamp.Frontend.Controllers
         {
             var data = await covidClient.GetAllCountryReportAsync(new HandshakeRequest { ClientToken = Guid.NewGuid().ToString() });
 
-            return  data.Countries.ToList();
+            return  data.Countries.OrderByDescending(r=> r.NewConfirmed).ToList();
         }
 
         public async Task<CovidGlobalReport> GetGlobal()

@@ -76,11 +76,11 @@
 
     $(function () {
 
+        setInterval(() =>
+        {
+            globalUpdateFunc();
 
-        globalUpdateFunc();
-
-        countryUpdateFunc();
-
-
+            countryUpdateFunc();
+        }, 10000);
     });
 </script>
