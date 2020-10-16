@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody id="countryBody">
-                    <div class="ui active inline loader"></div>
+                    
                 </tbody>
             </table>
         </div>
@@ -76,6 +76,8 @@
             .then(data => {
                 var htmls = [];
                 data.forEach(row => {
+                    row.slug = (row.slug + "").replace("-", "");
+
                     htmls.push('<tr id="' + row.slug + '">');
                     htmls.push('<td>' + row.countryCountry + '</td>');
                     htmls.push('<td class="warning" align="right">' + row.newConfirmed + '</div></a>');
@@ -89,8 +91,7 @@
 
                 $('#countryBody').html(htmls.join(' '));  
 
-                data.forEach(row => {
-                    row.slug = (row.slug + "").replace("-", "");
+                data.forEach(row => {                    
                     if (window[row.slug]) {
                         var old = window[row.slug];
                         if (old && old.date && old.date.nanos !== row.date.nanos) {
