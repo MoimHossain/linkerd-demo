@@ -11,7 +11,11 @@
                     <div class="sub header">Summary of all the countries</div>
                 </div>
             </h2>
-            <div class="ui vertical menu" id="menuContainer" style="width:100%;"></div>
+            <div class="ui vertical menu" id="menuContainer" style="width:100%;">
+                <div class="ui active dimmer">
+                    <div class="ui massive text loader">Loading</div>
+                </div>
+            </div>
         </div>
         <div class="ten wide column">
             <table class="ui compact table">
@@ -27,13 +31,23 @@
                     </tr>
                 </thead>
                 <tbody id="countryBody">
-                    
+                    <div class="ui active dimmer">
+                        <div class="ui massive text loader">Loading</div>
+                    </div>
                 </tbody>
             </table>
         </div>
     </div>
 
 <script>
+    function highlightFor(id, color, seconds) {
+        var element = document.getElementById(id)
+        var origcolor = element.style.backgroundColor
+        element.style.backgroundColor = color;
+        var t = setTimeout(function () {
+            element.style.backgroundColor = origcolor;
+        }, (seconds * 1000));
+    }
 
     var globalUpdateFunc = function () {
         fetch('/Home/GetGlobal')
@@ -50,6 +64,13 @@
 
 
                 $('#menuContainer').html(htmls.join(' '));
+
+                if (window.globalUpdate) {
+                    if (window.globalUpdate.date.nanos !== data.date.nanos) {
+                        highlightFor('menuContainer', 'orange', 1);
+                    }
+                }
+                window.globalUpdate = data;
             });
     };
 
@@ -59,18 +80,28 @@
             .then(data => {
                 var htmls = [];
                 data.forEach(row => {
-                    htmls.push('<tr>');
+                    htmls.push('<tr id="' + row.slug + '">');
                     htmls.push('<td>' + row.countryCountry + '</td>');
-                    htmls.push('<td class="warning">' + row.newConfirmed + '</div></a>');
-                    htmls.push('<td class="warning">' + row.totalConfirmed + '</div></a>');
-                    htmls.push('<td class="negative">' + row.newDeaths + '</div></a>');
-                    htmls.push('<td class="negative">' + row.totalDeaths + '</div></a>');
-                    htmls.push('<td class="positive">' + row.newRecovered + '</div></a>');
-                    htmls.push('<td class="positive">' + row.totalRecovered + '</div></a>');
+                    htmls.push('<td class="warning" align="right">' + row.newConfirmed + '</div></a>');
+                    htmls.push('<td class="warning" align="right">' + row.totalConfirmed + '</div></a>');
+                    htmls.push('<td class="negative" align="right">' + row.newDeaths + '</div></a>');
+                    htmls.push('<td class="negative" align="right">' + row.totalDeaths + '</div></a>');
+                    htmls.push('<td class="positive" align="right">' + row.newRecovered + '</div></a>');
+                    htmls.push('<td class="positive" align="right">' + row.totalRecovered + '</div></a>');
                     htmls.push('</tr>');
                 });
 
-                $('#countryBody').html(htmls.join(' '));                
+                $('#countryBody').html(htmls.join(' '));  
+
+                data.forEach(row => {
+                    if (window[row.slug]) {
+                        var old = window[row.slug];
+                        if (old.date.nanos !== row.date.nanos) {
+                            highlightFor(row.slug, 'orange', 1);
+                        }
+                    }
+                    window[row.slug] = row;
+                });
             });
     }
 
