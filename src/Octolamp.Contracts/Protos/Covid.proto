@@ -9,6 +9,8 @@ service Covid {
   rpc DoHandshake (HandshakeRequest) returns (HandshakeResponse);
   rpc RegisterReportSummary (CovidGlobalReport) returns (HandshakeResponse);
   rpc RegisterCountryReport (CovidCountryReport) returns (HandshakeResponse);
+  rpc GetGlobalReport (HandshakeRequest) returns (CovidGlobalReport);
+  rpc GetAllCountryReport (HandshakeRequest) returns (CovidAllCountryReport);
 }
 
 message HandshakeRequest {
@@ -29,6 +31,10 @@ message CovidGlobalReport {
     int64 newRecovered = 5;
     int64 totalRecovered = 6;
     google.protobuf.Timestamp date = 7;
+}
+
+message CovidAllCountryReport {
+    repeated CovidCountryReport countries = 1;
 }
 
 message CovidCountryReport {

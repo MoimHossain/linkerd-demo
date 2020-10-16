@@ -1,33 +1,86 @@
 ﻿@model IndexViewModel
 @{
-  ViewData["Title"] = "Home Page";
+  ViewData["Title"] = "Summary";
 }
+    <div class="ui grid">   
+        <div class="six wide column">
+            <h2 class="ui header">
+                <img src="https://www.osborneclarke.com/wp-content/uploads/2020/03/covid-website-icon-1.png" />
+                <div class="content">
+                    Global Summary
+                    <div class="sub header">Summary of all the countries</div>
+                </div>
+            </h2>
+            <div class="ui vertical menu" id="menuContainer" style="width:100%;"></div>
+        </div>
+        <div class="ten wide column">
+            <table class="ui compact table">
+                <thead>
+                    <tr>
+                        <th>Country</th>
+                        <th>New Confirmed</th>
+                        <th>Total Confirmed</th>
+                        <th>New Deaths</th>
+                        <th>Total Deathes</th>
+                        <th>New Recovered</th>
+                        <th>Total Recovered</th>
+                    </tr>
+                </thead>
+                <tbody id="countryBody">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-<div class="text-center">
-  <h1 class="display-4">NASDAQ 100 - MOIM HA</h1>
-</div>
-<div class="row">
-  <div class="col-8 offset-2 col-sm-12">
-    <table class="table">
-      <thead>
-      <tr>
-        <th>Symbol</th>
-        <th>Name</th>
-        <th>Server</th>
-      </tr>
-      </thead>
-      <tbody>
-      @foreach (var stock in Model.Stocks)
-      {
-        <tr>
-        <td>@stock.Symbol</td>
-        <td>@stock.Name</td>
-        <td>@stock.ServerId</td>
-        </tr>
-      }
-      </tbody>
-    </table>
-    <ul>
-    </ul>
-  </div>
-</div>
+<script>
+
+    var globalUpdateFunc = function () {
+        fetch('/Home/GetGlobal')
+            .then(response => response.json())
+            .then(data => {
+
+                var htmls = [];
+                htmls.push('<a class="item">New Confirmed<div class="ui label yellow">' + data.newConfirmed + '</div></a>');
+                htmls.push('<a class="item">Total Confirmed<div class="ui label orange">' + data.totalConfirmed + '</div></a>');
+                htmls.push('<a class="item">New Deaths<div class="ui label brown">' + data.newDeaths + '</div></a>');
+                htmls.push('<a class="item">Total Deaths<div class="ui label red">' + data.totalDeaths + '</div></a>');
+                htmls.push('<a class="item">New Recovered<div class="ui label green">' + data.newRecovered + '</div></a>');
+                htmls.push('<a class="item">Total Recovered<div class="ui label teal">' + data.totalRecovered + '</div></a>');
+
+
+                $('#menuContainer').html(htmls.join(' '));
+            });
+    };
+
+    var countryUpdateFunc = function () {
+        fetch('/Home/GetAllCountry')
+            .then(response => response.json())
+            .then(data => {
+                var htmls = [];
+                data.forEach(row => {
+                    htmls.push('<tr>');
+                    htmls.push('<td>' + row.countryCountry + '</td>');
+                    htmls.push('<td class="warning">' + row.newConfirmed + '</div></a>');
+                    htmls.push('<td class="warning">' + row.totalConfirmed + '</div></a>');
+                    htmls.push('<td class="negative">' + row.newDeaths + '</div></a>');
+                    htmls.push('<td class="negative">' + row.totalDeaths + '</div></a>');
+                    htmls.push('<td class="positive">' + row.newRecovered + '</div></a>');
+                    htmls.push('<td class="positive">' + row.totalRecovered + '</div></a>');
+                    htmls.push('</tr>');
+                });
+
+                $('#countryBody').html(htmls.join(' '));                
+            });
+    }
+
+    $(function () {
+
+
+        globalUpdateFunc();
+
+        countryUpdateFunc();
+
+
+    });
+</script>

@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
@@ -8,6 +11,7 @@ using Octolamp.Contracts.Extensions;
 using Octolamp.Contracts.Protos;
 using Octolamp.Frontend.Internal;
 using Octolamp.Frontend.Models;
+using static Octolamp.Contracts.Protos.Covid;
 
 namespace Octolamp.Frontend.Controllers
 {
@@ -15,39 +19,36 @@ namespace Octolamp.Frontend.Controllers
     {
         private readonly Stocks.StocksClient _stocksClient;
         private readonly ILogger<HomeController> _logger;
+        private readonly CovidClient covidClient;
 
-        public HomeController(ILogger<HomeController> logger, Stocks.StocksClient stocksClient)
+        public HomeController(
+            ILogger<HomeController> logger,
+            CovidClient covidClient,
+            Stocks.StocksClient stocksClient)
         {
             _stocksClient = stocksClient;
             _logger = logger;
+            this.covidClient = covidClient;
+        }
+
+        public async Task<List<CovidCountryReport>> GetAllCountry()
+        {
+            var data = await covidClient.GetAllCountryReportAsync(new HandshakeRequest { ClientToken = Guid.NewGuid().ToString() });
+
+            return  data.Countries.ToList();
+        }
+
+        public async Task<CovidGlobalReport> GetGlobal()
+        {
+            var response = await covidClient
+                .GetGlobalReportAsync(new HandshakeRequest { ClientToken = Guid.NewGuid().ToString() });
+            return response;
         }
 
         public async Task<IActionResult> Index()
         {
-            var tasks = Enumerable.Range(1, 100).Select(GetAsync);
-            var stockViewModels = await Task.WhenAll(tasks);
-            return View(new IndexViewModel(stockViewModels.ExcludeNulls().OrderBy(m => m.Symbol)));
-        }
-
-        private async Task<StockViewModel> GetAsync(int id)
-        {
-            try
-            {
-                var response = _stocksClient.GetAsync(new GetRequest {Id = id + 1});
-                var getResponse = await response.ResponseAsync;
-                var headers = await response.ResponseHeadersAsync;
-                return new StockViewModel(getResponse.Stock, headers.GetString("server-id"));
-            }
-            catch (RpcException e) when (e.StatusCode == Grpc.Core.StatusCode.NotFound)
-            {
-                _logger.LogWarning("Stock {id} not found", id);
-                return null;
-            }
-            catch (RpcException e)
-            {
-                _logger.LogError(e, e.Message);
-                return null;
-            }
+            await Task.CompletedTask;
+            return View(new IndexViewModel(new List<StockViewModel>()));
         }
 
         public IActionResult Privacy()

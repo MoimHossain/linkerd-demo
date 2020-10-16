@@ -53,5 +53,17 @@ namespace Octolamp.BackendService.Services
                 ServerToken = DateTime.Now.ToLongTimeString()
             };
         }
+
+        public async override Task<CovidGlobalReport> GetGlobalReport(
+            HandshakeRequest request, ServerCallContext context)
+        {
+            return await _repository.GetGlobalReportAsync();
+        }
+
+        public async override Task<CovidAllCountryReport> GetAllCountryReport(
+            HandshakeRequest request, ServerCallContext context)
+        {
+            return await _repository.GetAllCountryAsync();
+        }
     }
 }

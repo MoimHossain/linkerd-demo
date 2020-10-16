@@ -57,5 +57,21 @@ namespace Octolamp.BackendService.Data
             await Task.CompletedTask;
         }
 
+        public async Task<CovidGlobalReport> GetGlobalReportAsync()
+        {
+            await Task.CompletedTask;
+            return _globalReport;
+        }
+
+        public async Task<CovidAllCountryReport> GetAllCountryAsync()
+        {
+            await Task.CompletedTask;
+            var all = new CovidAllCountryReport();
+            foreach (var item in _countryList.Values.ToList())
+            {
+                all.Countries.Add(item);
+            }
+            return all;
+        }
     }
 }

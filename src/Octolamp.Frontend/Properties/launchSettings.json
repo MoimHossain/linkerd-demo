@@ -12,6 +12,7 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
+        "Backend__Address": "https://localhost:44321",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
