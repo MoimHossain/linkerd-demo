@@ -4,7 +4,7 @@
 }
     <div class="ui grid">   
         <div class="six wide column">
-            <h2 class="ui header">
+            <h2 class="ui header" id="headItem">
                 <img src="https://www.osborneclarke.com/wp-content/uploads/2020/03/covid-website-icon-1.png" />
                 <div class="content">
                     Global Summary
@@ -36,14 +36,6 @@
     </div>
 
 <script>
-    function highlightFor(id, color, seconds) {
-        var element = document.getElementById(id)
-        var origcolor = element.style.backgroundColor
-        element.style.backgroundColor = color;
-        var t = setTimeout(function () {
-            element.style.backgroundColor = origcolor;
-        }, (seconds * 1000));
-    }
 
     var globalUpdateFunc = function () {
         fetch('/Home/GetGlobal')
@@ -63,7 +55,7 @@
 
                 if (window.globalUpdate) {
                     if (window.globalUpdate.date.nanos !== data.date.nanos) {
-                        highlightFor('menuContainer', 'orange', 1);
+                        configureAnimation('#menuContainer');
                     }
                 }
                 window.globalUpdate = data;
@@ -95,7 +87,7 @@
                     if (window[row.slug]) {
                         var old = window[row.slug];
                         if (old && old.date && old.date.nanos !== row.date.nanos) {
-                            highlightFor(row.slug, 'orange', 1);
+                            configureAnimation('#' + row.slug);
                         }
                     }
                     window[row.slug] = row;
@@ -103,13 +95,21 @@
             });
     }
 
+    function configureAnimation(itemID) {
+        var delayBeforeAnim = Math.floor((Math.random() * 1000) + 1);
+        setTimeout(() => {
+            $(itemID).effect('highlight', { color: '#FFC300' }, 3000);
+        }, delayBeforeAnim);        
+    }
+
     $(function () {
 
         setInterval(() =>
         {
             globalUpdateFunc();
-
             countryUpdateFunc();
         }, 10000);
     });
+
+  
 </script>
