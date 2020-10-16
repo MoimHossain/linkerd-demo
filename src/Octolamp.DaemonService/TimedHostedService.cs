@@ -101,7 +101,7 @@ namespace Octolamp.DaemonService
         {
             _logger.LogInformation("Timed Hosted Service running.");
             _timer = new Timer(new TimerCallback(_ => { DoWork().Wait(); }), null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(50000));
+                TimeSpan.FromSeconds(5));
             return Task.CompletedTask;
         }
         public Task StopAsync(CancellationToken stoppingToken)
