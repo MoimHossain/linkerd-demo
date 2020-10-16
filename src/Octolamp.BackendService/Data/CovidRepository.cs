@@ -4,6 +4,7 @@ using Google.Protobuf.WellKnownTypes;
 using Octolamp.Contracts.Extensions;
 using Octolamp.Contracts.Protos;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace Octolamp.BackendService.Data
 {
     public class CovidRepository
     {
-        private static CovidGlobalReport _globalReport = new CovidGlobalReport() ;
-        private static List<CovidCountryReport> _countries = new List<CovidCountryReport>();
+        private static CovidGlobalReport _globalReport = new CovidGlobalReport();
+        private static ConcurrentDictionary<string, CovidCountryReport> _countryList = new ConcurrentDictionary<string, CovidCountryReport>();
 
         public CovidRepository()
         {
@@ -35,21 +36,24 @@ namespace Octolamp.BackendService.Data
 
         public async Task RegisterCountryAsync(CovidCountryReport country)
         {
-            var existingEntry = _countries
-                .FirstOrDefault(c => c.Slug.Equals(country.Slug, StringComparison.OrdinalIgnoreCase));
+            _countryList.TryGetValue(country.Slug, out var entry);
 
-            if (existingEntry == null)
+            if (entry == null)
             {
-                existingEntry = new CovidCountryReport();
-                _countries.Add(existingEntry);
+                entry = new CovidCountryReport();
             }
-            existingEntry.Date = country.Date;
-            existingEntry.NewConfirmed = country.NewConfirmed;
-            existingEntry.TotalConfirmed = country.TotalConfirmed;
-            existingEntry.NewDeaths = country.NewDeaths;
-            existingEntry.TotalDeaths = country.TotalDeaths;
-            existingEntry.NewRecovered = country.NewRecovered;
-            existingEntry.TotalRecovered = country.TotalRecovered;
+
+            if(entry != null )
+            {
+                entry.Date = country.Date;
+                entry.NewConfirmed = country.NewConfirmed;
+                entry.TotalConfirmed = country.TotalConfirmed;
+                entry.NewDeaths = country.NewDeaths;
+                entry.TotalDeaths = country.TotalDeaths;
+                entry.NewRecovered = country.NewRecovered;
+                entry.TotalRecovered = country.TotalRecovered;
+                _countryList.TryAdd(country.Slug, entry);
+            }   
             await Task.CompletedTask;
         }
 
