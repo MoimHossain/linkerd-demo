@@ -1,15 +1,11 @@
 ﻿
 
-using Grpc.Core;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Octolamp.Contracts.Extensions;
+using Octolamp.Contracts.Dtos;
 using Octolamp.Contracts.Protos;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static Octolamp.Contracts.Protos.Covid;
@@ -21,69 +17,91 @@ namespace Octolamp.DaemonService
     {
         private async Task DoWork()
         {
-            var count = Interlocked.Increment(ref executionCount);
-
             try
             {
                 var response = await _covidClient.DoHandshakeAsync(new HandshakeRequest { ClientToken = DateTime.Now.ToLongTimeString() });
-
-                _logger.LogInformation("========================================================================================");
                 _logger.LogInformation($"Handshake success. Client Token = {response.ClientToken}; Server Token: {response.ServerToken}");
-
+                
+                var report = await _covid19ApiClient.GetSummaryAsync();
+                if (report != null && report.Global != null && report.Countries != null)
+                {
+                    await RelayGlobalSummaryAsync(report);
+                    await RelayCountryUpdatesAsync(report);
+                }
             }
             catch (Exception e)
             {
                 _logger.LogError(e, e.Message);
             }
-      
-            //var tasks = Enumerable.Range(1, 100).Select(GetAsync);
-            //var stocks = await Task.WhenAll(tasks);
-            //_logger.LogInformation($"Timed Hosted Service is working. Count: {count}, number of Stocks {stocks.Count()}" );
         }
 
-        private async Task<Tuple<Stock, string>> GetAsync(int id)
+        private async Task RelayGlobalSummaryAsync(RawCovidReport report)
         {
-            try
+            var sumRespose = await _covidClient.RegisterReportSummaryAsync(new CovidGlobalReport
             {
-                var response = _stockClient.GetAsync(new GetRequest { Id = id + 1 });
-                var getResponse = await response.ResponseAsync;
-                var headers = await response.ResponseHeadersAsync;
-                return new Tuple<Stock, string>(getResponse.Stock, headers.GetString("server-id"));
-            }
-            catch (RpcException e) when (e.StatusCode == Grpc.Core.StatusCode.NotFound)
+                Date = Timestamp.FromDateTimeOffset(DateTime.UtcNow),
+                NewConfirmed = report.Global.NewConfirmed,
+                TotalConfirmed = report.Global.TotalConfirmed,
+                NewDeaths = report.Global.NewDeaths,
+                TotalDeaths = report.Global.TotalDeaths,
+                NewRecovered = report.Global.NewRecovered,
+                TotalRecovered = report.Global.TotalRecovered,
+            });
+
+            if (!string.IsNullOrWhiteSpace(sumRespose.ServerToken))
             {
-                _logger.LogWarning("Stock {id} not found", id);
-                return null;
-            }
-            catch (RpcException e)
-            {
-                _logger.LogError(e, e.Message);
-                return null;
+                this._logger.LogInformation("Successfully registered the Global summary payload");
             }
         }
 
+        private async Task RelayCountryUpdatesAsync(RawCovidReport report)
+        {
+            foreach (var country in report.Countries)
+            {
+                var conResponse = await _covidClient.RegisterCountryReportAsync(new CovidCountryReport
+                {
+                    CountryCode = country.CountryCode,
+                    CountryCountry = country.Country,
+                    Slug = country.Slug,
+                    Date = Timestamp.FromDateTimeOffset(DateTime.UtcNow),
+                    NewConfirmed = country.NewConfirmed,
+                    TotalConfirmed = country.TotalConfirmed,
+                    NewDeaths = country.NewDeaths,
+                    TotalDeaths = country.TotalDeaths,
+                    NewRecovered = country.NewRecovered,
+                    TotalRecovered = country.TotalRecovered,
+                });
+
+                if (!string.IsNullOrWhiteSpace(conResponse.ServerToken))
+                {
+                    this._logger.LogInformation($"Successfully registered the Country {country.Country} summary payload");
+                }
+            }
+        }
 
         #region Service methods
-        private int executionCount = 0;
         private readonly StocksClient _stockClient;
         private readonly CovidClient _covidClient;
         private readonly ILogger<TimedHostedService> _logger;
+        private readonly Covid19ApiClient _covid19ApiClient;
         private Timer _timer;
 
         public TimedHostedService(
             CovidClient covidClient,
-            StocksClient stockClient, 
+            StocksClient stockClient,
+            Covid19ApiClient covid19ApiClient,
             ILogger<TimedHostedService> logger)
         {
             _covidClient = covidClient;
             _stockClient = stockClient;
+            _covid19ApiClient = covid19ApiClient;
             _logger = logger;
         }
         public Task StartAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Timed Hosted Service running.");
             _timer = new Timer(new TimerCallback(_ => { DoWork().Wait(); }), null, TimeSpan.Zero,
-                TimeSpan.FromSeconds(5));
+                TimeSpan.FromSeconds(50000));
             return Task.CompletedTask;
         }
         public Task StopAsync(CancellationToken stoppingToken)

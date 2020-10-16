@@ -1,4 +1,6 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿
+
+using Google.Protobuf.WellKnownTypes;
 using Octolamp.Contracts.Protos;
 using System;
 using System.Collections.Generic;
