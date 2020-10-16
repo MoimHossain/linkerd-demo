@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Octolamp.Contracts.Settings;
+using Octolamp.Frontend.Hubs;
 using static Octolamp.Contracts.Protos.Covid;
 using static Octolamp.Contracts.Protos.Stocks;
 
@@ -26,15 +27,21 @@ namespace Octolamp.Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.Configure<BackendSettings>(Configuration.GetSection("Backend"));
 
+            services.AddSignalR();
+
+            ConfigureGrpcServices(services);
+        }
+
+        private void ConfigureGrpcServices(IServiceCollection services)
+        {
+            services.Configure<BackendSettings>(Configuration.GetSection("Backend"));
             var configureAction = new Action<IServiceProvider, GrpcClientFactoryOptions>((provider, options) =>
             {
                 var settings = provider.GetRequiredService<IOptionsMonitor<BackendSettings>>();
                 options.Address = new Uri(settings.CurrentValue.Address);
                 Console.WriteLine($"Backend address from configuration: {options.Address}");
             });
-
             services.AddGrpcClient<CovidClient>(configureAction);
             services.AddGrpcClient<StocksClient>(configureAction);
         }
@@ -61,6 +68,8 @@ namespace Octolamp.Frontend
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
     }
