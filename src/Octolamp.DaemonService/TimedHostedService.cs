@@ -4,6 +4,7 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Octolamp.Contracts.Dtos;
+using Octolamp.Contracts.Extensions;
 using Octolamp.Contracts.Protos;
 using System;
 using System.Threading;
@@ -39,7 +40,7 @@ namespace Octolamp.DaemonService
         {
             var sumRespose = await _covidClient.RegisterReportSummaryAsync(new CovidGlobalReport
             {
-                Date = Timestamp.FromDateTimeOffset(DateTime.UtcNow),
+                Date = DateTime.UtcNow.ToProtoDateTime(),
                 NewConfirmed = report.Global.NewConfirmed,
                 TotalConfirmed = report.Global.TotalConfirmed,
                 NewDeaths = report.Global.NewDeaths,
@@ -63,7 +64,7 @@ namespace Octolamp.DaemonService
                     CountryCode = country.CountryCode,
                     CountryCountry = country.Country,
                     Slug = country.Slug,
-                    Date = Timestamp.FromDateTimeOffset(DateTime.UtcNow),
+                    Date = DateTime.UtcNow.ToProtoDateTime(),
                     NewConfirmed = country.NewConfirmed,
                     TotalConfirmed = country.TotalConfirmed,
                     NewDeaths = country.NewDeaths,

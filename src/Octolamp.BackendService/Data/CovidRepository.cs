@@ -21,7 +21,7 @@ namespace Octolamp.BackendService.Data
 
         public async Task RegisterGlobalAsync(CovidGlobalReport gr)
         {
-            _globalReport.Date = Timestamp.FromDateTime(DateTime.UtcNow);
+            _globalReport.Date = gr.Date;
             _globalReport.NewConfirmed = gr.NewConfirmed;
             _globalReport.TotalConfirmed = gr.TotalConfirmed;
             _globalReport.NewDeaths = gr.NewDeaths;
@@ -42,7 +42,7 @@ namespace Octolamp.BackendService.Data
                 existingEntry = new CovidCountryReport();
                 _countries.Add(existingEntry);
             }
-            existingEntry.Date = Timestamp.FromDateTime(DateTime.UtcNow);
+            existingEntry.Date = country.Date;
             existingEntry.NewConfirmed = country.NewConfirmed;
             existingEntry.TotalConfirmed = country.TotalConfirmed;
             existingEntry.NewDeaths = country.NewDeaths;
