@@ -26,6 +26,7 @@ namespace Octolamp.DaemonService
                 await hubContext.Clients.All.SendCoreAsync("ReceiveMessage", 
                     new object[] {
                     "Hello wrold from server"});
+                await hubContext.DisposeAsync();
                 // End
 
                 var response = await _covidClient.DoHandshakeAsync(new HandshakeRequest { ClientToken = DateTime.Now.ToLongTimeString() });
