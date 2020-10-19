@@ -27,9 +27,7 @@ namespace Octolamp.Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
-            services.AddSignalR();
-
+            services.AddSignalR().AddAzureSignalR();
             ConfigureGrpcServices(services);
         }
 
@@ -69,7 +67,7 @@ namespace Octolamp.Frontend
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-                endpoints.MapHub<ChatHub>("/chathub");
+                endpoints.MapHub<NotificationHub>("/notificationhub");
             });
         }
     }

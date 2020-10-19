@@ -3,6 +3,7 @@
 using Grpc.Net.ClientFactory;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.SignalR.Management;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -29,6 +30,7 @@ namespace Octolamp.DaemonService
         {
             services.AddControllersWithViews();
             services.Configure<BackendSettings>(Configuration.GetSection("Backend"));
+            services.Configure<AzureSettings>(Configuration.GetSection("Azure"));
 
             var configureAction = new Action<IServiceProvider, GrpcClientFactoryOptions>((provider, options) =>
             {
@@ -37,6 +39,17 @@ namespace Octolamp.DaemonService
                 Console.WriteLine($"Backend address from configuration: {options.Address}");
             });
 
+            services.AddSingleton(provider => 
+            {
+                var configSettings = provider.GetRequiredService<IOptionsMonitor<AzureSettings>>();
+                var serviceManager = new ServiceManagerBuilder()
+                     .WithOptions(option =>
+                     {
+                         option.ConnectionString = configSettings.CurrentValue.SignalR.ConnectionString;
+                     })
+                     .Build();
+                return (IServiceManager)serviceManager;
+            });
             services.AddSingleton(new HttpClient { BaseAddress = new Uri("https://api.covid19api.com") });
             services.AddSingleton<Covid19ApiClient>();
             services.AddGrpcClient<CovidClient>(configureAction);

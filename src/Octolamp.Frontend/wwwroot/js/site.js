@@ -1,12 +1,12 @@
 ﻿
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+var connection = new signalR.HubConnectionBuilder().withUrl("/notificationhub").build();
 
 
 
 connection.on("ReceiveMessage", function (user, message) {
 
-    console.log(message);
+    console.log(user, message);
 
 });
 

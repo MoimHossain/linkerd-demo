@@ -1,6 +1,7 @@
 ﻿
 
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.Azure.SignalR.Management;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Octolamp.Contracts.Dtos;
@@ -20,6 +21,13 @@ namespace Octolamp.DaemonService
         {
             try
             {
+                // signalR
+                var hubContext = await _signalRServiceManager.CreateHubContextAsync("notificationhub");
+                await hubContext.Clients.All.SendCoreAsync("ReceiveMessage", 
+                    new object[] {
+                    "Hello wrold from server"});
+                // End
+
                 var response = await _covidClient.DoHandshakeAsync(new HandshakeRequest { ClientToken = DateTime.Now.ToLongTimeString() });
                 _logger.LogInformation($"Handshake success. Client Token = {response.ClientToken}; Server Token: {response.ServerToken}");
                 
@@ -85,17 +93,20 @@ namespace Octolamp.DaemonService
         private readonly CovidClient _covidClient;
         private readonly ILogger<TimedHostedService> _logger;
         private readonly Covid19ApiClient _covid19ApiClient;
+        private readonly IServiceManager _signalRServiceManager;
         private Timer _timer;
 
         public TimedHostedService(
             CovidClient covidClient,
             StocksClient stockClient,
             Covid19ApiClient covid19ApiClient,
+            IServiceManager serviceManagerBuilder,
             ILogger<TimedHostedService> logger)
         {
             _covidClient = covidClient;
             _stockClient = stockClient;
             _covid19ApiClient = covid19ApiClient;
+            _signalRServiceManager = serviceManagerBuilder;
             _logger = logger;
         }
         public Task StartAsync(CancellationToken stoppingToken)
