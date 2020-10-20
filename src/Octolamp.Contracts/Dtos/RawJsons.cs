@@ -67,4 +67,40 @@ namespace Octolamp.Contracts.Dtos
         [JsonProperty("TotalRecovered")]
         public long TotalRecovered { get; set; }
     }
+
+    public partial class RawCovidLocation
+    {
+        [JsonProperty("province")]
+        public string Province { get; set; }
+
+        [JsonProperty("country")]
+        public string Country { get; set; }
+
+        [JsonProperty("latitude")]
+        public double? Latitude { get; set; }
+
+        [JsonProperty("longitude")]
+        public double? Longitude { get; set; }
+
+        [JsonProperty("confirmed_cases")]
+        public long? ConfirmedCases { get; set; }
+
+        [JsonProperty("deaths")]
+        public long? Deaths { get; set; }
+
+        [JsonProperty("recovered")]
+        public string Recovered { get; set; }
+
+        [JsonProperty("update_time")]
+        public DateTimeOffset UpdateTime { get; set; }
+
+        [JsonProperty("data_source")]
+        public string DataSource { get; set; }
+
+        [JsonProperty("country_code")]
+        public string CountryCode { get; set; }
+
+        [JsonProperty("region")]
+        public string Region { get; set; }
+    }
 }

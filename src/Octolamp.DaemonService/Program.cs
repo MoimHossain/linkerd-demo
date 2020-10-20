@@ -26,6 +26,7 @@ namespace Octolamp.DaemonService
                 .ConfigureServices(services =>
                 {
                     services.AddHostedService<TimedHostedService>();
+                    services.AddHostedService<LocationTracker>();
                 });
     }
 }
