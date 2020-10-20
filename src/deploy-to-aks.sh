@@ -9,7 +9,7 @@ echo "Preparing manifests with build Tag $DockerImageTag"
 
 echo "SignalR Information:"
 echo "Resoure Group: $ResourceGroup"
-echo "Name: SignalRName"
+echo "Name: $SignalRName"
 
 echo " "
 echo "┌┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┐"
@@ -17,7 +17,7 @@ echo "┊ Creating SignalR                                   │"
 echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┘"
 
 az signalr create --name $SignalRName --resource-group $ResourceGroup --sku Standard_S1 --unit-count 1 --service-mode Default
-primaryConnectionString=$(az signalr key list --name moimhossain --resource-group test-signalr --query primaryConnectionString -o tsv)
+primaryConnectionString=$(az signalr key list --name $SignalRName --resource-group $ResourceGroup --query primaryConnectionString -o tsv)
 
 
 echo "Connection String retrieved.. replacing...$primaryConnectionString"
