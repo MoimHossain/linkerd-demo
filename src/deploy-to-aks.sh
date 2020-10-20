@@ -21,9 +21,9 @@ primaryConnectionString=$(az signalr key list --name $SignalRName --resource-gro
 
 
 echo "Connection String retrieved.. replacing...$primaryConnectionString"
-sed -i "s/SIGNALRPCINFO/$primaryConnectionString/" backend-linkerd-demo.yml
-sed -i "s/SIGNALRPCINFO/$primaryConnectionString/" frontend-linkerd-demo.yml
-sed -i "s/SIGNALRPCINFO/$primaryConnectionString/" daemon-linkerd-demo.yml
+sed -i "s|SIGNALRPCINFO|$primaryConnectionString|" backend-linkerd-demo.yml
+sed -i "s|SIGNALRPCINFO|$primaryConnectionString|" frontend-linkerd-demo.yml
+sed -i "s|SIGNALRPCINFO|$primaryConnectionString|" daemon-linkerd-demo.yml
 
 echo "Replaceing Image tags.."
 sed -i "s/latest/$DockerImageTag/" backend-linkerd-demo.yml
