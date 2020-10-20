@@ -20,6 +20,8 @@ spec:
       - env:
         - name: Backend__Address
           value: http://backend-linkerd-demo
+        - name: Azure__SignalR__ConnectionString
+          value: SIGNALRPCINFO
         - name: DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2UNENCRYPTEDSUPPORT
           value: "true"
         image: moimhossain/daemon-linkerd-demo:latest
