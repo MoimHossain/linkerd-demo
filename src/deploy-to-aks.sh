@@ -20,7 +20,7 @@ az signalr create --name $SignalRName --resource-group $ResourceGroup --sku Stan
 primaryConnectionString=$(az signalr key list --name moimhossain --resource-group test-signalr --query primaryConnectionString -o tsv)
 
 
-echo "Connection String retrieved.. replacing..."
+echo "Connection String retrieved.. replacing...$primaryConnectionString"
 sed -i "s/SIGNALRPCINFO/$primaryConnectionString/" backend-linkerd-demo.yml
 sed -i "s/SIGNALRPCINFO/$primaryConnectionString/" frontend-linkerd-demo.yml
 sed -i "s/SIGNALRPCINFO/$primaryConnectionString/" daemon-linkerd-demo.yml
