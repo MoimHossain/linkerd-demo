@@ -242,7 +242,8 @@ namespace Octolamp.DaemonService.Supports
         public static async Task<TPayload> ReadContentAsync<TPayload>(this HttpContent content)
         {
             var contentString = await content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<TPayload>(contentString);
+            return JsonConvert.DeserializeObject<TPayload>(contentString, 
+                new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
     }
 }

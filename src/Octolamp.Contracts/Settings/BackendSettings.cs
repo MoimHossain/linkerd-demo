@@ -11,4 +11,14 @@ namespace Octolamp.Contracts.Settings
     {
         public string Address { get; set; }
     }
+
+    public class AzureSettings
+    {
+        public SignalRSettings SignalR { get; set; }
+    }
+
+    public class SignalRSettings
+    {
+        public string ConnectionString { get; set; }
+    }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Octolamp.Frontend.Hubs
 {
-    public class ChatHub : Hub
+    public class NotificationHub : Hub
     {
         public async Task SendMessage(string user, string message)
         {

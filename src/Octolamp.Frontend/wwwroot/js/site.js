@@ -1,26 +1,23 @@
 ﻿
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
 
 
-connection.on("ReceiveMessage", function (user, message) {
+$(function () {
 
-    console.log(message);
+    var connection = new signalR.HubConnectionBuilder().withUrl("/notificationhub").build();
+    connection.on("ReceiveMessage", function (countryData) {
+        datasource.add(new atlas.data.Feature(
+            new atlas.data.Point([countryData.longitude, countryData.latitude]),
+            {
+                "mag": countryData.Cases
+            }));
+        console.log(countryData.Country + " " + countryData.lattitude + "  " + countryData.longitude);
+    });
+    connection.start().then(function () {
+        console.log("SignalR connected..successfully");
+    }).catch(function (err) {
+        return console.error(err.toString());
+    });
 
 });
-
-connection.start().then(function () {
-    console.log("SignalR connected..successfully");
-}).catch(function (err) {
-    return console.error(err.toString());
-});
-
-//document.getElementById("sendButton").addEventListener("click", function (event) {
-//    var user = document.getElementById("userInput").value;
-//    var message = document.getElementById("messageInput").value;
-//    connection.invoke("SendMessage", user, message).catch(function (err) {
-//        return console.error(err.toString());
-//    });
-//    event.preventDefault();
-//});

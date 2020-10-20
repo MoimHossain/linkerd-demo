@@ -1,6 +1,7 @@
 ﻿
 
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.Azure.SignalR.Management;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Octolamp.Contracts.Dtos;
@@ -81,7 +82,6 @@ namespace Octolamp.DaemonService
         }
 
         #region Service methods
-        private readonly StocksClient _stockClient;
         private readonly CovidClient _covidClient;
         private readonly ILogger<TimedHostedService> _logger;
         private readonly Covid19ApiClient _covid19ApiClient;
@@ -89,12 +89,10 @@ namespace Octolamp.DaemonService
 
         public TimedHostedService(
             CovidClient covidClient,
-            StocksClient stockClient,
             Covid19ApiClient covid19ApiClient,
             ILogger<TimedHostedService> logger)
         {
             _covidClient = covidClient;
-            _stockClient = stockClient;
             _covid19ApiClient = covid19ApiClient;
             _logger = logger;
         }
