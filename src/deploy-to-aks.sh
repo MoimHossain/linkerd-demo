@@ -44,7 +44,7 @@ echo "┌┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈�
 echo "┊ Applying to Kubernetes                             │"
 echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┘"
 
-#kubectl apply -f namespace.yml
-#kubectl apply -f backend-linkerd-demo.yml
-#kubectl apply -f frontend-linkerd-demo.yml
-#kubectl apply -f daemon-linkerd-demo.yml
+kubectl apply -f namespace.yml
+kubectl apply -f backend-linkerd-demo.yml
+kubectl apply -f frontend-linkerd-demo.yml
+kubectl apply -f daemon-linkerd-demo.yml
