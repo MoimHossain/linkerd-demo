@@ -12,7 +12,7 @@ $(function () {
             {
                 "mag": countryData.Cases
             }));
-        console.log(countryData.Country + " " + countryData.lattitude + "  " + countryData.longitude);
+        console.log(countryData.longitude, countryData.latitude);
     });
     connection.start().then(function () {
         console.log("SignalR connected..successfully");
