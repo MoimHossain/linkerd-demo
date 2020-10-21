@@ -5,6 +5,48 @@ variables:
   clusterName: 'k8s-linkerd-moimha'
 
 steps:
+- task: AzureCLI@2
+  displayName: 'Create AKS Cluster'
+  inputs:
+    azureSubscription: 'Moim-AzureSubcription-POWER'
+    scriptType: bash
+    scriptPath: src/infrastructure/kubernetes.sh
+  env:
+    clientSecret: $(clientSecret)
+    clientId: $(clientId)
+    aadTenantId: $(aadTenantId)
+    subscriptionId: $(subscriptionId)
+    clusterName: $(clusterName)
+    resourceGroup: $(resourceGroup)
+    location: $(location)
+
+- task: AzureCLI@2
+  displayName: 'Kubernetes Set-Context'
+  inputs:
+    azureSubscription: 'Moim-AzureSubcription-POWER'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: 'az aks get-credentials --resource-group $(resourceGroup) --name $(clusterName) --overwrite-existing'
+  env:
+    clientSecret: $(clientSecret)
+    clientId: $(clientId)
+
+- task: AzureCLI@2
+  displayName: 'Install LinkerD CLI & Control Plane'
+  inputs:
+    azureSubscription: 'Moim-AzureSubcription-POWER'
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+     curl -sL https://run.linkerd.io/install | sh     
+     export PATH=$PATH:$HOME/.linkerd2/bin     
+     linkerd check --pre     
+     linkerd install | kubectl apply -f -     
+     linkerd check
+  env:
+    clientSecret: $(clientSecret)
+    clientId: $(clientId)
+
 - task: Docker@2
   displayName: 'Docker Hub Login'
   inputs:
@@ -20,7 +62,7 @@ steps:
     inlineScript: 'az aks get-credentials --resource-group $(resourceGroup) --name $(clusterName) --overwrite-existing'
 
 - task: AzureCLI@2
-  displayName: 'Azure CLI src/buildimages.sh'
+  displayName: 'Build Docker images'
   inputs:
     azureSubscription: 'Moim-AzureSubcription-POWER'
     scriptType: bash
@@ -34,6 +76,8 @@ steps:
     azureSubscription: 'Moim-AzureSubcription-POWER'
     scriptType: bash
     scriptPath: 'src/deploy-to-aks.sh'
-    arguments: '$(Build.BuildNumber)'
+    arguments: '$(Build.BuildNumber) $(resourceGroup) $(signalRName)'
     workingDirectory: src/manifests
-
+  env:
+    signalRName: $(signalRName)
+    resourceGroup: $(resourceGroup)
