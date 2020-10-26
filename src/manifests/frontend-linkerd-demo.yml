@@ -52,7 +52,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: frontend-ingress
-  namespace: default
+  namespace: linkerd-demo-workload
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
