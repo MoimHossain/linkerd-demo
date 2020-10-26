@@ -22,7 +22,7 @@ az network dns record-set a add-record \
 
 echo " "
 echo "┌┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┐"
-echo "  Linkerd Dashboard: $SubDomain.$ZoneName.com  "
+echo "  Linkerd Dashboard: $SubDomain.$ZoneName  "
 echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┘"
 
 
@@ -39,5 +39,5 @@ az network dns record-set a add-record \
 
 echo " "
 echo "┌┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┐"
-echo "  App Dashboard: $SubDomain.$ZoneName.com  "
+echo "  App Dashboard: $SubDomain.$ZoneName  "
 echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┘"
