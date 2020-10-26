@@ -38,46 +38,55 @@ steps:
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
-     curl -sL https://run.linkerd.io/install | sh     
-     export PATH=$PATH:$HOME/.linkerd2/bin     
-     linkerd check --pre     
-     linkerd install | kubectl apply -f -     
+     curl -sL https://run.linkerd.io/install | sh
+     
+     export PATH=$PATH:$HOME/.linkerd2/bin
+     
+     linkerd check --pre
+     
+     linkerd install | kubectl apply -f -
+     
      linkerd check
   env:
     clientSecret: $(clientSecret)
     clientId: $(clientId)
 
-- task: Docker@2
-  displayName: 'Docker Hub Login'
+- task: HelmInstaller@0
+  displayName: 'Install Helm 3.0.0'
   inputs:
-    containerRegistry: 'Docker-Hub-Public'
-    command: login
+    helmVersion: 3.0.0
+
+- bash: 'helm repo add stable https://kubernetes-charts.storage.googleapis.com/'
+  displayName: 'Helm - Add Stable repository'
+
+- bash: |
+   # Use Helm to deploy an NGINX ingress controller
+   helm install nginx-ingress stable/nginx-ingress \
+       --namespace default \
+       --set controller.replicaCount=2 \
+       --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
+       --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
+  displayName: 'Helm - Add Ingress Controller'
 
 - task: AzureCLI@2
-  displayName: 'Kubernetes Set-Context'
+  displayName: 'Expose linkerd dashboard'
   inputs:
     azureSubscription: 'Moim-AzureSubcription-POWER'
     scriptType: bash
     scriptLocation: inlineScript
-    inlineScript: 'az aks get-credentials --resource-group $(resourceGroup) --name $(clusterName) --overwrite-existing'
-
-- task: AzureCLI@2
-  displayName: 'Build Docker images'
-  inputs:
-    azureSubscription: 'Moim-AzureSubcription-POWER'
-    scriptType: bash
-    scriptPath: src/buildimages.sh
-    arguments: '$(Build.BuildNumber)'
-    workingDirectory: src
-
-- task: AzureCLI@2
-  displayName: 'Kubernetes Apply'
-  inputs:
-    azureSubscription: 'Moim-AzureSubcription-POWER'
-    scriptType: bash
-    scriptPath: 'src/deploy-to-aks.sh'
-    arguments: '$(Build.BuildNumber) $(resourceGroup) $(signalRName)'
+    inlineScript: ' kubectl apply -f .\dashboard.yml'
     workingDirectory: src/manifests
   env:
-    signalRName: $(signalRName)
-    resourceGroup: $(resourceGroup)
+    clientSecret: $(clientSecret)
+    clientId: $(clientId)
+
+- task: AzureCLI@2
+  displayName: 'Create DNS Records'
+  inputs:
+    azureSubscription: 'Moim-AzureSubcription-POWER'
+    scriptType: bash
+    scriptPath: src/dns.sh
+  env:
+    clientSecret: $(clientSecret)
+    clientId: $(clientId)
+
