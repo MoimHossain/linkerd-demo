@@ -74,7 +74,7 @@ steps:
     azureSubscription: 'Moim-AzureSubcription-POWER'
     scriptType: bash
     scriptLocation: inlineScript
-    inlineScript: ' kubectl apply -f .\dashboard.yml'
+    inlineScript: ' kubectl apply -f dashboard.yml'
     workingDirectory: src/manifests
   env:
     clientSecret: $(clientSecret)
