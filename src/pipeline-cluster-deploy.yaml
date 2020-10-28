@@ -56,7 +56,7 @@ steps:
   inputs:
     helmVersion: 3.0.0
 
-- bash: 'helm repo add stable https://kubernetes-charts.storage.googleapis.com/'
+- bash: 'helm repo add stable https://charts.helm.sh/stable'
   displayName: 'Helm - Add Stable repository'
 
 - bash: |
@@ -79,6 +79,9 @@ steps:
   env:
     clientSecret: $(clientSecret)
     clientId: $(clientId)
+
+- bash: 'sleep 2m'
+  displayName: 'Wait on Public IP provisions'
 
 - task: AzureCLI@2
   displayName: 'Create DNS Records'
