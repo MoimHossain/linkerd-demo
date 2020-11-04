@@ -16,6 +16,8 @@ spec:
       labels:
         run: frontend-linkerd-demo
     spec:
+      imagePullSecrets:
+      - name: dockerhub      
       containers:
       - env:
         - name: Backend__Address
@@ -25,9 +27,7 @@ spec:
         - name: DOTNET_SYSTEM_NET_HTTP_SOCKETSHTTPHANDLER_HTTP2UNENCRYPTEDSUPPORT
           value: "true"
         image: moimhossain/frontend-linkerd-demo:latest
-        imagePullPolicy: Always
-        imagePullSecrets:
-        - name: dockerhub        
+        imagePullPolicy: Always        
         name: frontend-linkerd-demo
         ports:
         - containerPort: 80

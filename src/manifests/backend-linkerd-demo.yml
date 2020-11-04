@@ -17,11 +17,11 @@ spec:
       labels:
         run: backend-linkerd-demo
     spec:
+      imagePullSecrets:
+      - name: dockerhub
       containers:
       - image: moimhossain/backend-linkerd-demo:latest
         imagePullPolicy: Always
-        imagePullSecrets:
-        - name: dockerhub
         name: backend-linkerd-demo
         ports:
         - containerPort: 80

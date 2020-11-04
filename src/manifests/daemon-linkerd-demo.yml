@@ -16,6 +16,8 @@ spec:
       labels:
         run: daemon-linkerd-demo
     spec:
+      imagePullSecrets:
+      - name: dockerhub
       containers:
       - env:
         - name: Backend__Address
@@ -26,8 +28,6 @@ spec:
           value: "true"
         image: moimhossain/daemon-linkerd-demo:latest
         imagePullPolicy: Always
-        imagePullSecrets:
-        - name: dockerhub
         name: daemon-linkerd-demo
         resources:
           limits:
