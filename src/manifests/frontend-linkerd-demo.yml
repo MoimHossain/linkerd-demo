@@ -26,6 +26,8 @@ spec:
           value: "true"
         image: moimhossain/frontend-linkerd-demo:latest
         imagePullPolicy: Always
+        imagePullSecrets:
+        - name: dockerhub        
         name: frontend-linkerd-demo
         ports:
         - containerPort: 80

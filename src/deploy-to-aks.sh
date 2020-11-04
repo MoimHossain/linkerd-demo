@@ -2,7 +2,7 @@
 DockerImageTag=$1
 ResourceGroup=$2
 SignalRName=$3
-
+DockerPassword=$4
 
 echo " "
 echo "Preparing manifests with build Tag $DockerImageTag"
@@ -45,6 +45,9 @@ echo "┊ Applying to Kubernetes                             │"
 echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┘"
 
 kubectl apply -f namespace.yml
+
+kubectl -n dapr-workload create secret docker-registry dockerhub --docker-server=https://index.docker.io/v1/ --docker-username=moimhossain --docker-password=$DockerPassword --docker-email=moimhossain@gmail.com
+
 kubectl apply -f backend-linkerd-demo.yml
 kubectl apply -f frontend-linkerd-demo.yml
 kubectl apply -f daemon-linkerd-demo.yml

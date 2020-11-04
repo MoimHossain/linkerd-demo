@@ -26,6 +26,8 @@ spec:
           value: "true"
         image: moimhossain/daemon-linkerd-demo:latest
         imagePullPolicy: Always
+        imagePullSecrets:
+        - name: dockerhub
         name: daemon-linkerd-demo
         resources:
           limits:
