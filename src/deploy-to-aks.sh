@@ -46,7 +46,7 @@ echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈�
 
 kubectl apply -f namespace.yml
 
-kubectl -n dapr-workload create secret docker-registry dockerhub --docker-server=https://index.docker.io/v1/ --docker-username=moimhossain --docker-password=$DockerPassword --docker-email=moimhossain@gmail.com
+kubectl -n linkerd-demo-workload create secret docker-registry dockerhub --docker-server=https://index.docker.io/v1/ --docker-username=moimhossain --docker-password=$DockerPassword --docker-email=moimhossain@gmail.com
 
 kubectl apply -f backend-linkerd-demo.yml
 kubectl apply -f frontend-linkerd-demo.yml
