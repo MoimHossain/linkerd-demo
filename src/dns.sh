@@ -41,3 +41,22 @@ echo " "
 echo "┌┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┐"
 echo "  App Dashboard: $SubDomain.$ZoneName  "
 echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┘"
+
+
+
+
+SubDomain="bocanary"
+echo "Deleting existing A Records "
+az network dns record-set \
+    a delete --resource-group $ResourceGroup \
+    --zone-name $ZoneName --name $SubDomain -y
+echo "Creating A Record "    
+az network dns record-set a add-record \
+    --resource-group $ResourceGroup \
+    --zone-name $ZoneName \
+    --record-set-name $SubDomain --ipv4-address $externalIP
+
+echo " "
+echo "┌┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┐"
+echo "  Canary release DEMO URL: $SubDomain.$ZoneName  "
+echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┘"
