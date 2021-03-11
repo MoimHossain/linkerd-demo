@@ -1,4 +1,4 @@
-SubDomain="dashboard"
+SubDomain="mesh-dashboard"
 ResourceGroup="rgp-foundations"
 ZoneName="octo-lamp.nl"
 
