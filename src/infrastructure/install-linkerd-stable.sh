@@ -6,10 +6,11 @@ linkerd check --pre
 linkerd install | kubectl apply -f -
 linkerd check
 
-
+echo "Waiting for 2 mins to give Linkerd time to get things worked out..."
+sleep 2m
+echo "Installing linkerd viz"
 
 linkerd viz install | kubectl apply -f -
 
 linkerd viz check
 linkerd check
-kubectl apply -f ./dashboard.yml
