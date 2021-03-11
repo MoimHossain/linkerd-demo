@@ -15,6 +15,3 @@ helm install ingress-nginx ingress-nginx/ingress-nginx \
     --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
 
 
-echo "Waiting for 4 mins to give ingress-nginx time to get things worked out..."
-sleep 4m
-kubectl get all -n ingress-nginx

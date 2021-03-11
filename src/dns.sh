@@ -1,9 +1,9 @@
-SubDomain="linkerd"
+SubDomain="dashboard"
 ResourceGroup="rgp-foundations"
 ZoneName="octo-lamp.nl"
 
 echo "Retrieving IP of nginx Ingress..."
-externalIP=$(kubectl get svc nginx-ingress-controller -ojsonpath='{.status.loadBalancer.ingress[0].ip}')
+externalIP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -ojsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 echo " "
 echo "┌┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┐"

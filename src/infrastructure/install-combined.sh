@@ -9,8 +9,8 @@ linkerd check --pre
 linkerd install | kubectl apply -f -
 linkerd check
 
-echo "Waiting for 2 mins to give Linkerd time to get things worked out..."
-sleep 2m
+echo "Waiting for 1 mins to give Linkerd time to get things worked out..."
+sleep 1m
 echo "Installing linkerd viz"
 
 linkerd viz install | kubectl apply -f -
@@ -18,8 +18,8 @@ linkerd viz install | kubectl apply -f -
 linkerd viz check
 linkerd check
 
-echo "Waiting for 2 mins to give Linkerd Viz time to get things worked out..."
-sleep 2m
+echo "Waiting for 1 mins to give Linkerd Viz time to get things worked out..."
+sleep 1m
 echo "Installing Ingress nginx"
 
 helm repo add stable https://charts.helm.sh/stable
@@ -37,8 +37,8 @@ helm install ingress-nginx ingress-nginx/ingress-nginx \
     --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux
 
 
-echo "Waiting for 4 mins to give ingress-nginx time to get things worked out..."
-sleep 4m
+echo "Waiting for 2 mins to give ingress-nginx time to get things worked out..."
+sleep 2m
 kubectl get all -n ingress-nginx
 
 
