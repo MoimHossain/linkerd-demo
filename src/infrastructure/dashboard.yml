@@ -24,7 +24,7 @@ metadata:
     nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
   rules:
-    - host: mesh-dashboard.octo-lamp.nl
+    - host: cluster.octo-lamp.nl
       http:
         paths:
           - backend:
