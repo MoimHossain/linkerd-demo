@@ -45,7 +45,7 @@ echo "└┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈�
 
 
 
-SubDomain="bocanary"
+SubDomain="naos"
 echo "Deleting existing A Records "
 az network dns record-set \
     a delete --resource-group $ResourceGroup \
